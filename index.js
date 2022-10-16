@@ -103,6 +103,32 @@ app.post("/books", async (req, res) => {
     }
 });
 
+app.get("/books/:bookId", async (req, res) => {
+    try {
+        const book = await db.book.findByPk(req.params.bookId, {
+            include: [
+                {
+                    model: db.author,
+                    attributes: ["id", "firstName", "lastName"],
+                    through: { attributes: [] } // to ignore rows from join table
+                }
+            ]
+        });
+        if (book) {
+            res.json(book)
+        } else {
+            res.status(404).json({
+                error: "Book not found."
+            })
+        }
+    } catch (error) {
+        console.log(error);
+        res.json({
+            error: error.errors[0].message
+        });
+    }
+});
+
 app.delete("/books/:bookId", async (req, res) => {
     try {
         const count = await db.book.destroy({
@@ -111,13 +137,13 @@ app.delete("/books/:bookId", async (req, res) => {
         if (count === 0) {
             res.status(400).json({
                 error: "The book you are trying to delete does not exist."
-            })
+            });
         } else {
-            console.log(count)
-            res.status(204).send()
+            console.log(count);
+            res.status(204).send();
         }
     } catch (error) {
-        console.log(error)
+        console.log(error);
         res.json({
             error: error.errors[0].message
         });
