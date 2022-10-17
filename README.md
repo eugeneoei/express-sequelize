@@ -12,43 +12,43 @@ A basic and simple example on `sequelize` using `express` and `postgresql`.
 The following are the endpoints used in this example:
 
 - `POST /authors`
-    ```json
-    // example payload
-    {
-        "firstName": "Bucky",
-        "lastName": "Barnes",
-        "email": "bucky.barnes@email.com"
-    }
-    ```
+    - Example payload
+        ```json
+        {
+            "firstName": "Bucky",
+            "lastName": "Barnes",
+            "email": "bucky.barnes@email.com"
+        }
+        ```
 - `GET /authors`
 - `POST /books`
-    ```json
-    // example payload
-    // authors is an array of author ids
-    {
-        "title": "Avengers: End Game",
-        "synopsis": "Avengersssss..... Assemble! AHHHHHHH!",
-        "authors": [
-            "7caba341-7402-4084-a14d-875c862704d7",
-            "84091467-398d-41ee-bb5c-7799f6a0cbae",
-            "75d3b7ea-db28-4697-8f46-f82880bfa86a",
-            "95dedb08-131c-4264-9d83-55f94ba141f2",
-            "281fd5f0-4392-4bce-a70f-36c4a9306370"
-        ]
-    }
-    ```
+    - Example payload
+    - `authors` is an array of author ids
+        ```json
+        {
+            "title": "Avengers: End Game",
+            "synopsis": "Avengersssss..... Assemble! AHHHHHHH!",
+            "authors": [
+                "7caba341-7402-4084-a14d-875c862704d7",
+                "84091467-398d-41ee-bb5c-7799f6a0cbae",
+                "75d3b7ea-db28-4697-8f46-f82880bfa86a",
+                "95dedb08-131c-4264-9d83-55f94ba141f2",
+                "281fd5f0-4392-4bce-a70f-36c4a9306370"
+            ]
+        }
+        ```
 - `GET /books`
 - `GET /books/:bookId`
 - `DELETE /books/:bookId`
 - `POST /books/:bookId/reviews`
-    ```json
-    // example payload
-    // rating must be an integer and between 1 to 5
-    {
-        "rating": 4,
-        "content": "I am Iron Man."
-    }
-    ```
+    - Example payload
+    - `rating` must be an integer and between 1 to 5
+        ```json
+        {
+            "rating": 4,
+            "content": "I am Iron Man."
+        }
+        ```
 
 # Getting started
 
