@@ -1,11 +1,62 @@
 # Express-Sequelize
 
+A basic and simple example on `sequelize` using `express` and `postgresql`.
+
+# Relationships
+
+- Book **M:M** Author
+- Book **1:M** Reviews
+
+# Routes
+
+The following are the endpoints used in this example:
+
+- `POST /authors`
+    ```json
+    // example payload
+    {
+        "firstName": "Bucky",
+        "lastName": "Barnes",
+        "email": "bucky.barnes@email.com"
+    }
+    ```
+- `GET /authors`
+- `POST /books`
+    ```json
+    // example payload
+    // authors is an array of author ids
+    {
+        "title": "Avengers: End Game",
+        "synopsis": "Avengersssss..... Assemble! AHHHHHHH!",
+        "authors": [
+            "7caba341-7402-4084-a14d-875c862704d7",
+            "84091467-398d-41ee-bb5c-7799f6a0cbae",
+            "75d3b7ea-db28-4697-8f46-f82880bfa86a",
+            "95dedb08-131c-4264-9d83-55f94ba141f2",
+            "281fd5f0-4392-4bce-a70f-36c4a9306370"
+        ]
+    }
+    ```
+- `GET /books`
+- `GET /books/:bookId`
+- `DELETE /books/:bookId`
+- `POST /books/:bookId/reviews`
+    ```json
+    // example payload
+    // rating must be an integer and between 1 to 5
+    {
+        "rating": 4,
+        "content": "I am Iron Man."
+    }
+    ```
 
 # Getting started
 
-TODO
-
-npx sequelize db:seed:all
+- Create `.env.development` file using contents in `env.example` update respective values
+- Run `npm install`
+- Run `npx sequelize db:migrate` to create tables in database
+- Run `npx sequelize db:seed:all` to seed some data into tables
+- Run `npm run dev`
 
 # Sequelize commands
 
