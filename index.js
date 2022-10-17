@@ -64,6 +64,11 @@ app.get("/books", async (req, res) => {
                     model: db.author,
                     attributes: ["id", "firstName", "lastName"],
                     through: { attributes: [] } // to ignore rows from join table
+                },
+                {
+                    model: db.review,
+                    attributes: ["id", "content", "rating"],
+                    as: "reviews"
                 }
             ]
         });
@@ -115,11 +120,11 @@ app.get("/books/:bookId", async (req, res) => {
             ]
         });
         if (book) {
-            res.json(book)
+            res.json(book);
         } else {
             res.status(404).json({
                 error: "Book not found."
-            })
+            });
         }
     } catch (error) {
         console.log(error);
@@ -142,6 +147,28 @@ app.delete("/books/:bookId", async (req, res) => {
             console.log(count);
             res.status(204).send();
         }
+    } catch (error) {
+        console.log(error);
+        res.json({
+            error: error.errors[0].message
+        });
+    }
+});
+
+app.post("/books/:bookId/reviews", async (req, res) => {
+    /*
+        eg req.body
+        {
+            "content": "great book!",
+            "rating": 1.1
+        }
+    */
+    try {
+        const review = await db.review.create({
+            bookId: req.params.bookId,
+            ...req.body
+        });
+        res.json(review);
     } catch (error) {
         console.log(error);
         res.json({

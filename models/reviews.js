@@ -1,7 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-    class book extends Model {
+    class reviews extends Model {
         /**
          * Helper method for defining associations.
          * This method is not a part of Sequelize lifecycle.
@@ -9,43 +9,45 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            models.book.belongsToMany(models.author, {
-                through: "booksAuthors"
-            });
-            models.book.hasMany(models.review);
+            models.review.belongsTo(models.book);
         }
     }
-    book.init(
+    reviews.init(
         {
-            title: {
+            bookId: DataTypes.UUID,
+            content: {
                 type: DataTypes.STRING,
                 allowNull: false,
                 validate: {
                     notEmpty: {
-                        msg: "'title' cannot by empty."
+                        msg: "'content' cannot by empty."
                     },
                     notNull: {
-                        msg: "'title' is required."
+                        msg: "'content' is required."
                     }
                 }
             },
-            synopsis: {
-                type: DataTypes.STRING,
+            rating: {
+                type: DataTypes.INTEGER,
                 allowNull: false,
                 validate: {
-                    notEmpty: {
-                        msg: "'synopsis' cannot by empty."
+                    isInt: {
+                        msg: "Rating must be an integer."
+                    },
+                    isIn: {
+                        args: [[1, 2, 3, 4, 5]],
+                        msg: "Rating must be either 1, 2, 3, 4, or 5."
                     },
                     notNull: {
-                        msg: "'synopsis' is required."
+                        msg: "'rating' is required."
                     }
                 }
             }
         },
         {
             sequelize,
-            modelName: "book"
+            modelName: "review"
         }
     );
-    return book;
+    return reviews;
 };
