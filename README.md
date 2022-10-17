@@ -5,7 +5,19 @@
 
 TODO
 
+npx sequelize db:seed:all
+
 # Sequelize commands
+
+### Creating models and tables
+
+Syntax:
+
+```bash
+npx sequelize model:create --name <model-name> --attributes attributeOneName:attributeOneType,attributeTwoName:attributeTwoType
+```
+
+Examples:
 
 ```bash
 # create author
@@ -19,4 +31,17 @@ npx sequelize model:create --name booksAuthors --attributes bookId:uuid,authorId
 
 # create book reviews 1:M relationship
 npx sequelize model:create --name review --attributes bookId:uuid,content:string,rating:integer
+```
+
+### Creating seeder files
+
+Syntax:
+
+```bash
+npx sequelize-cli seed:generate --name <name-of-seed-file>
+```
+
+Examples:
+```bash
+npx sequelize-cli seed:generate --name reviews
 ```

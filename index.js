@@ -40,8 +40,8 @@ app.post("/authors", async (req, res) => {
     */
     try {
         const body = req.body;
-        const user = await db.author.create(body);
-        res.json(user);
+        const author = await db.author.create(body);
+        res.json(author);
     } catch (error) {
         const errorData = error.errors[0];
         if (errorData.validatorKey === "not_unique") {
