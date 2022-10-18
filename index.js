@@ -30,14 +30,6 @@ app.get("/authors", async (req, res) => {
 });
 
 app.post("/authors", async (req, res) => {
-    /*
-        eg req.body
-        {
-            "firstName": "Tony",
-            "lastName": "Stark",
-            "email": "tony.stark@email.com"
-        }
-    */
     try {
         const body = req.body;
         const author = await db.author.create(body);
@@ -79,14 +71,6 @@ app.get("/books", async (req, res) => {
 });
 
 app.post("/books", async (req, res) => {
-    /*
-        eg req.body
-        {
-            "title": "Iron Man",
-            "synopsis": "Millionaire, playboy, philanthropist",
-            "authors": ["bf388937-30f4-4299-8e7b-e6aa389a41e1"] // array of author's id
-        }
-    */
     try {
         const { title, synopsis, authors } = req.body;
         const [book] = await db.book.findOrCreate({
@@ -156,13 +140,6 @@ app.delete("/books/:bookId", async (req, res) => {
 });
 
 app.post("/books/:bookId/reviews", async (req, res) => {
-    /*
-        eg req.body
-        {
-            "content": "great book!",
-            "rating": 1.1
-        }
-    */
     try {
         const review = await db.review.create({
             bookId: req.params.bookId,
