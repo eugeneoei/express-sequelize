@@ -20,8 +20,8 @@ app.get("/", (req, res) => {
 app.get("/authors", async (req, res) => {
     try {
         // * get all authors
-        const authors = await db.author.findAll();
-        res.json(authors);
+        // const authors = await db.author.findAll();
+        // res.json(authors);
 
         // * OR operator
         // const authors = await db.author.findAll({
@@ -50,17 +50,17 @@ app.get("/authors", async (req, res) => {
         // res.json(authors);
 
         // * pagination
-        // const { pageSize, page } = req.query;
-        // const usePagination = pageSize && page;
-        // const { count, rows } = await db.author.findAndCountAll({
-        //     ...(usePagination && { limit: pageSize }),
-        //     ...(usePagination && { offset: (page - 1) * pageSize })
-        // });
-        // res.json({
-        //     count,
-        //     authors: rows,
-        //     hasNextPage: usePagination ? page * pageSize < count : false
-        // });
+        const { pageSize, page } = req.query;
+        const hasPagination = pageSize && page;
+        const { count, rows } = await db.author.findAndCountAll({
+            ...(hasPagination && { limit: pageSize }),
+            ...(hasPagination && { offset: (page - 1) * pageSize })
+        });
+        res.json({
+            count,
+            authors: rows,
+            hasNextPage: hasPagination ? page * pageSize < count : false
+        });
     } catch (error) {
         res.json(error);
     }
