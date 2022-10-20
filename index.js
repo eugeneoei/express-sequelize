@@ -6,12 +6,11 @@ require("dotenv").config({
 });
 const express = require("express");
 const db = require("./models");
+const { Op, fn, col } = require("sequelize");
 
 const app = express();
-
 app.use(express.json());
 
-// TODO: serve express build base file
 app.get("/", (req, res) => {
     res.json({
         message: "success"
@@ -20,12 +19,50 @@ app.get("/", (req, res) => {
 
 app.get("/authors", async (req, res) => {
     try {
+        // * get all authors
         const authors = await db.author.findAll();
         res.json(authors);
+
+        // * OR operator
+        // const authors = await db.author.findAll({
+        //     where: {
+        //         [Op.or]: [{ firstName: "Peter" }, { firstName: "Tony" }]
+        //         // firstName: ["peter", "Tony"] // equivalent to above
+        //     }
+        // });
+        // res.json(authors);
+
+        // * AND operator
+        // const authors = await db.author.findAll({
+        //     where: {
+        //         [Op.and]: [{ firstName: "Tony" }, { lastName: "Stark" }]
+        //     }
+        // });
+        // res.json(authors);
+
+        // * ordering
+        // const authors = await db.author.findAll({
+        //     order: [
+        //         // ["firstName"] // by default in asecending order
+        //         ["firstName", "DESC"]
+        //     ]
+        // });
+        // res.json(authors);
+
+        // * pagination
+        // const { pageSize, page } = req.query;
+        // const usePagination = pageSize && page;
+        // const { count, rows } = await db.author.findAndCountAll({
+        //     ...(usePagination && { limit: pageSize }),
+        //     ...(usePagination && { offset: (page - 1) * pageSize })
+        // });
+        // res.json({
+        //     count,
+        //     authors: rows,
+        //     hasNextPage: usePagination ? page * pageSize < count : false
+        // });
     } catch (error) {
-        res.json({
-            error: error.errors[0].message
-        });
+        res.json(error);
     }
 });
 
@@ -51,6 +88,15 @@ app.post("/authors", async (req, res) => {
 app.get("/books", async (req, res) => {
     try {
         const books = await db.book.findAll({
+            attributes: [
+                "id",
+                "title",
+                "synopsis",
+                "createdAt",
+                "updatedAt",
+                [fn("COUNT", col("reviews.id")), "reviewsCount"]
+            ],
+            group: ["book.id", "authors.id", "reviews.id"],
             include: [
                 {
                     model: db.author,
@@ -66,6 +112,7 @@ app.get("/books", async (req, res) => {
         });
         res.json(books);
     } catch (error) {
+        console.log(error);
         res.json(error);
     }
 });
