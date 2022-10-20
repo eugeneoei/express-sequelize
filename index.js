@@ -94,7 +94,11 @@ app.get("/books", async (req, res) => {
                 "synopsis",
                 "createdAt",
                 "updatedAt",
-                [fn("COUNT", col("reviews.id")), "reviewsCount"]
+                [fn("COUNT", col("reviews.id")), "reviewsCount"],
+                [
+                    fn("ROUND", fn("AVG", col("reviews.rating")), 2),
+                    "averageRating"
+                ]
             ],
             group: ["book.id", "authors.id", "reviews.id"],
             include: [
