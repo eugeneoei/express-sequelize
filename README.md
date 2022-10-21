@@ -52,7 +52,7 @@ The following are the endpoints used in this example:
 
 # Getting started
 
-- Create `.env.development` file using contents in `env.example` update respective values
+- Create `.env` file using contents in `env.example` update respective values
 - Run `npm install`
 - Run `npx sequelize db:migrate` to create tables in database
 - Run `npx sequelize db:seed:all` to seed some data into tables

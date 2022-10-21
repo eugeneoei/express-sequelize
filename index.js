@@ -1,9 +1,4 @@
-require("dotenv").config({
-    path:
-        process.env.ENVIRONMENT === "production"
-            ? "./.env.production"
-            : "./.env.development"
-});
+require("dotenv").config();
 const express = require("express");
 const db = require("./models");
 const { Op, fn, col } = require("sequelize");
