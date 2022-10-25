@@ -57,6 +57,7 @@ app.get("/authors", async (req, res) => {
             hasNextPage: hasPagination ? page * pageSize < count : false
         });
     } catch (error) {
+        console.log(error);
         res.json(error);
     }
 });
@@ -132,20 +133,36 @@ app.post("/books", async (req, res) => {
         res.json(book);
     } catch (error) {
         console.log(error);
-        res.json({
-            error: error.errors[0].message
-        });
+        res.json(error);
     }
 });
 
 app.get("/books/:bookId", async (req, res) => {
     try {
         const book = await db.book.findByPk(req.params.bookId, {
+            attributes: [
+                "id",
+                "title",
+                "synopsis",
+                "createdAt",
+                "updatedAt",
+                [fn("COUNT", col("reviews.id")), "reviewsCount"],
+                [
+                    fn("ROUND", fn("AVG", col("reviews.rating")), 2),
+                    "averageRating"
+                ]
+            ],
+            group: ["book.id", "authors.id", "reviews.id"],
             include: [
                 {
                     model: db.author,
                     attributes: ["id", "firstName", "lastName"],
                     through: { attributes: [] } // to ignore rows from join table
+                },
+                {
+                    model: db.review,
+                    attributes: ["id", "content", "rating"],
+                    as: "reviews"
                 }
             ]
         });
@@ -158,9 +175,7 @@ app.get("/books/:bookId", async (req, res) => {
         }
     } catch (error) {
         console.log(error);
-        res.json({
-            error: error.errors[0].message
-        });
+        res.json(error);
     }
 });
 
@@ -179,9 +194,7 @@ app.delete("/books/:bookId", async (req, res) => {
         }
     } catch (error) {
         console.log(error);
-        res.json({
-            error: error.errors[0].message
-        });
+        res.json(error);
     }
 });
 
@@ -194,9 +207,7 @@ app.post("/books/:bookId/reviews", async (req, res) => {
         res.json(review);
     } catch (error) {
         console.log(error);
-        res.json({
-            error: error.errors[0].message
-        });
+        res.json(error);
     }
 });
 
